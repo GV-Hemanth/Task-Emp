@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org"
+      th:replace="~{ base :: layout(~{::title} , ~{::section}) }">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Emp Save Form</title>
+</head>
+<body>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <p class="fs-4">Add Emp</p>
+                            <th:block th:if="${session.msg}">
+                                <p class="text-center text-success fs-4">[[${session.msg}]]</p>
+                                <th:block th:text="${@empServiceImpl.removeSessionMessage()}"></th:block>
+                            </th:block>
+                        </div>
+                        <div class="card-body">
+                            <form action="saveEmp" method="post">
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="fullName" id="fullName">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="age" class="form-label">Age</label>
+                                    <input type="number" class="form-control" name="age" id="age">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" name="dateOfBirth" id="dateOfBirth">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="salary" class="form-label">Salary</label>
+                                    <input type="number" class="form-control" name="salary" id="salary">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="department" class="form-label">Department</label>
+                                    <input type="text" class="form-control" name="department" id="department">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
