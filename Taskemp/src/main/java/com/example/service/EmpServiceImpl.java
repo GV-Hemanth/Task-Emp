@@ -68,7 +68,6 @@ public class EmpServiceImpl implements EmpService {
     
     @Override
     public List<Employee> searchEmp(String searchTerm) {
-        // Assuming you want to search by full name or any part of it
         return empRepo.findAll(Sort.by(Sort.Direction.ASC, "fullName"))
                       .stream()
                       .filter(emp -> emp.getFullName().toLowerCase().contains(searchTerm.toLowerCase()))
@@ -82,14 +81,14 @@ public class EmpServiceImpl implements EmpService {
     public String getAverageSalaryByDepartment(String department) {
         List<Employee> employeesInDepartment = empRepo.findByDepartment(department);
         if (employeesInDepartment.isEmpty()) {
-            return "No employees found in this department"; // Or handle it differently
+            return "No employees found in this department";
         }
 
         double totalSalary = employeesInDepartment.stream()
                                                   .mapToDouble(Employee::getSalary)
                                                   .sum();
         double averageSalary = totalSalary / employeesInDepartment.size();
-        return String.format("%.2f", averageSalary); // Format to two decimal places
+        return String.format("%.2f", averageSalary);
     }
     
     

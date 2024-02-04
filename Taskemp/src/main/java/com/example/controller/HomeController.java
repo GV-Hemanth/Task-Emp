@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,18 +47,43 @@ public class HomeController {
         return "edit_emp";
     }
 
+//    @PostMapping("/saveEmp")
+//    public String saveEmp(@ModelAttribute Employee emp, HttpSession session) {
+//        Employee newEmp = empService.saveEmp(emp);
+//
+//        if (newEmp != null) {
+//            session.setAttribute("msg", "Registererd successfully");
+//        } else {
+//            session.setAttribute("msg", "Something wrong on server");
+//        }
+//
+//        return "redirect:/loadEmpSave";
+//    }
+    
+    
+    
+    
     @PostMapping("/saveEmp")
-    public String saveEmp(@ModelAttribute Employee emp, HttpSession session) {
+    public String saveEmp( @ModelAttribute Employee emp, BindingResult bindingResult, HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/";
+        }
+
         Employee newEmp = empService.saveEmp(emp);
 
         if (newEmp != null) {
-            session.setAttribute("msg", "Registererd successfully");
+            session.setAttribute("msg", "Registered successfully");
+            return "redirect:/"; 
         } else {
             session.setAttribute("msg", "Something wrong on server");
+            return "redirect:/loadEmpSave";
         }
-
-        return "redirect:/loadEmpSave";
     }
+
+    
+    
+    
+    
 
     @PostMapping("/updateEmpDtls")
     public String updateEmp(@ModelAttribute Employee emp, HttpSession session) {
@@ -98,7 +124,7 @@ public class HomeController {
     
     
     
-    @PostMapping("/searchEmp") // Or any suitable mapping
+    @PostMapping("/searchEmp")
     public String searchEmp(@RequestParam("searchTerm") String searchTerm, Model model) {
     	
     	if (searchTerm == null || searchTerm.isEmpty()) {
@@ -107,9 +133,9 @@ public class HomeController {
 
     	
     	
-        List<Employee> empList = empService.searchEmp(searchTerm); // Assuming your service has a search method
+        List<Employee> empList = empService.searchEmp(searchTerm); 
         model.addAttribute("empList", empList);
-        return "index"; // Return to the same view
+        return "index";
     }
     
     
@@ -124,12 +150,9 @@ public class HomeController {
         String avgSalary = empService.getAverageSalaryByDepartment(department);
         model.addAttribute("department", department);
         model.addAttribute("averageSalary", avgSalary);
-
-        // Fetch empList only when necessary (e.g., on initial page load or sorting/searching)
-        // If not needed for displaying the average salary, remove this line:
         model.addAttribute("empList", empService.getAllEmp("", ""));
 
-        return "index"; // Or a dedicated view for displaying average salary
+        return "index";
     }
 
 
